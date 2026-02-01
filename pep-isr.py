@@ -1,6 +1,6 @@
 import pandas as pd
 import numpy as np
-from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import MinMaxScaler
 from sklearn.ensemble import RandomForestRegressor, StackingRegressor
 from sklearn.linear_model import Lasso
 from sklearn.model_selection import train_test_split
@@ -65,7 +65,7 @@ def feature_engineering(dataset, label):
 
 def train_model(new_dataset, label):
     preprocessing = ColumnTransformer(transformers=[
-        ("scale", StandardScaler(), selected_features)
+        ("scale", MinMaxScaler(), selected_features)
     ])
     X_train, X_test, y_train, y_test = train_test_split(new_dataset, label, test_size=0.2, random_state=42)
     print(X_train)

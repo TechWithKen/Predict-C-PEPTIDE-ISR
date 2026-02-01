@@ -65,7 +65,7 @@ def train_ensemble_models(dictionary):
         ("svc", SVC(C=1, kernel="rbf", probability=True, random_state=42, gamma="scale")),
     ]
 
-    meta_model = LogisticRegression(C=10, class_weight="balanced")
+    meta_model = LogisticRegression(C=10, class_weight="balanced", max_iter=2000)
 
     stack_models = StackingClassifier(
         estimators=base_models,
