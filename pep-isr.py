@@ -26,8 +26,12 @@ dataset_new = pd.get_dummies(dataset, columns=['Family_History_of_Diabetes', 'Ge
 X = dataset_new
 y = dataset_label
 
-model = Lasso(alpha=0.1)
-model.fit(X, y)
+scaler = StandardScaler()
+X_another = scaler.fit_transform(X)
+print(X_another)
+
+model = Lasso(alpha=0.01)
+model.fit(X_another, y)
 selected_features = X.columns[model.coef_ != 0]
 X_new = X[selected_features]
 
@@ -35,13 +39,10 @@ X_new = X[selected_features]
 X_train, X_test, y_train, y_test = train_test_split(X_new, y, test_size=0.2, random_state=42)
 
 
-preprocessing = ColumnTransformer(transformers=[
-    ("scale", StandardScaler(), selected_features)
-])
-
 base_models = [
-    ("rdf", RandomForestRegressor(n_estimators=100, max_features="sqrt", min_samples_leaf=2, max_depth=5)),
+    ("rdf", RandomForestRegressor(n_estimators=100, max_features="sqrt", min_samples_leaf=2, max_depth=5, random_state=42)),
     ("kn", KNeighborsRegressor(n_neighbors=5, weights="distance")),
+    ("xgb", XGBRegressor(n_estimators=300, learning_rate=0.1, subsample=1.0, max_depth=5, random_state=42))
 ]
 
 
@@ -51,7 +52,6 @@ stacked_model = StackingRegressor(estimators=base_models,
                                    final_estimator=meta_model, passthrough=True)
 
 xgbmodel = Pipeline(steps=[
-    ("preprocess", preprocessing),
     ("model", stacked_model)
 ])
 
