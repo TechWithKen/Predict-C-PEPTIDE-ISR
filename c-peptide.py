@@ -26,12 +26,12 @@ def discreteSplit(dataframe):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     X_train_numeric = X_train.select_dtypes(include=np.number)
     kbd = KBinsDiscretizer(
-        n_bins=5,
+        n_bins=4,
         encode='ordinal',
         strategy='quantile'
     )
     X_train_binned = kbd.fit_transform(X_train_numeric)
-    selector = SelectKBest(score_func=chi2, k=15)
+    selector = SelectKBest(score_func=chi2, k=20)
     selector.fit(X_train_binned, y_train)
     selected_features = X_train_numeric.columns[selector.get_support()]
 
@@ -97,11 +97,11 @@ print(train_ensemble_models(discreteSplit(dataset)))
 
 """
 METRICS ANALYSIS:
- 
-Accuracy: 91.5% 
-Precision 90.4% 
-Recall 0.94.5%
-F1-Score = 91.4%
-Area Under Curve = 98%
+
+Accuracy: 92.6%
+Precision: 92.2% 
+Recall: 94.5%
+F1-Score = 92.6%
+Area Under Curve = 98.4%
 
 """
