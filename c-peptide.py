@@ -87,7 +87,7 @@ def train_ensemble_models(dictionary):
 
     model_dataset = discreteSplit(dataset)
     measurement = model_dataset["y_test"], prediction
-    print(f' Accuracy: {accuracy_score(measurement[0], measurement[1])}, Precision {precision_score(measurement[0], measurement[1])}, Recall {recall_score(measurement[0], measurement[1])}, F1-Score = {f1_score(y_test, prediction, average="weighted")}')
+    print(f' Accuracy: {accuracy_score(measurement[0], measurement[1])}, Precision {precision_score(measurement[0], measurement[1])}, Recall {recall_score(measurement[0], measurement[1])}, F1-Score = {f1_score(measurement[0], measurement[1], average="weighted")}')
     y_prob = processing.predict_proba(model_dataset["X_test"])[:,1] # probability of positive class
     auc = roc_auc_score(model_dataset["y_test"], y_prob)
     return("AUC:", auc)
@@ -95,15 +95,13 @@ def train_ensemble_models(dictionary):
 print(train_ensemble_models(discreteSplit(dataset)))
 
 
-# fpr, tpr, thresholds = roc_curve(model_dataset["y_test"], y_prob)
-# plt.plot(fpr, tpr, label=f"AUC = {roc_auc_score(model_dataset["y_test"], y_prob):.2f}")
-# plt.plot([0,1],[0,1],'--')  # random line
-# plt.xlabel("False Positive Rate")
-# plt.ylabel("True Positive Rate (Recall)")
-# plt.title("ROC Curve")
-# plt.legend()
-# plt.show()
+"""
+METRICS ANALYSIS:
+ 
+Accuracy: 91.5% 
+Precision 90.4% 
+Recall 0.94.5%
+F1-Score = 91.4%
+Area Under Curve = 98%
 
-# # AUC score
-# auc = roc_auc_score(model_dataset["y_test"], y_prob)
-# print("AUC:", auc)
+"""
